@@ -1,0 +1,30 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Function to display usage information
+show_usage() {
+	echo -e "usage: \e[01;33mtermux-ownership\e[0m <\e[01;36mfiles\e[0m>"
+	echo "Rewrite ownership of specified files for running under Termux"
+}
+show_version() {
+	echo -e "$0 v1.0\nby PhateValleyman\nJonas.Ned@outlook.com"
+}
+
+# Check for the correct number of arguments
+if [ "$#" -eq 0 ] || [ "$1" = "-?" ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [ "$1" = "help" ]; then
+	show_usage
+	exit 1
+fi
+if [ "$1" = "-v" ] || [ "$1" = "--version" ] || [ "$1" = "version" ]; then
+	show_version
+	exit 1
+fi
+
+
+# Apply ownership changes to specified files
+for files in "$@"; do
+	if su -c "chown -R 10209:10209 '$files'"; then
+		echo -e "$files \e[01;36mmodified for Termux\e[0m"
+	else
+		echo -e "$files \e[01;31mcant mod\e[0m"
+	fi
+done
